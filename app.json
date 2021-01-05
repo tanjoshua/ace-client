@@ -1,0 +1,12 @@
+{
+  "name": "ace-client",
+  "displayName": "ace-client",
+  "expo": {
+    "name": "ace-client",
+    "slug": "ace-client",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
