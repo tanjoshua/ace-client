@@ -36,10 +36,12 @@ export const signup = (name, email, password, type) => {
 };
 
 export const login = (email, password) => {
-  return (dispatch) => {
+  return async (dispatch) => {
     try {
-      const response = await axios
-      .post(urls.server + "/auth/login", { email, password });
+      const response = await axios.post(urls.server + "/auth/login", {
+        email,
+        password,
+      });
 
       if (response.status != 200) throw new Error("Login failed");
 
@@ -52,23 +54,20 @@ export const login = (email, password) => {
         })
       );
 
-        // store login data in store
-        dispatch({
-          type: LOGIN,
-          payload: response.data,
-        });
+      // store login data in store
+      dispatch({
+        type: LOGIN,
+        payload: response.data,
+      });
     } catch (error) {
       throw error;
     }
-
-    
-      
   };
 };
 
 export const logout = () => {
-  return (dispatch) => {
-    AsyncStorage.removeItem("@user")
+  return async (dispatch) => {
+    await AsyncStorage.removeItem("@user");
     dispatch({ type: LOGOUT });
   };
 };

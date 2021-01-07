@@ -8,9 +8,21 @@ const initialState = {
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOGIN:
-      break;
+      return {
+        ...state,
+        token: action.payload.token,
+        userId: action.payload.userId,
+      };
     case SIGNUP:
-      break;
+      return {
+        ...state,
+        token: action.payload.token,
+        userId: action.payload.userId,
+      };
+    case LOGOUT:
+      return {
+        ...initialState,
+      };
   }
 };
 
