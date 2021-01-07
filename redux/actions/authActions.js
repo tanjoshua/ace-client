@@ -1,41 +1,74 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import urls from "../../constants/urls";
-import { LOGIN, SIGNUP } from "./types";
+import { LOGIN, LOGOUT, SIGNUP } from "./types";
 import axios from "axios";
 
 export const signup = (name, email, password, type) => {
-  return (dispatch) => {
-    axios
-      .post(urls.server + "/auth/signup", { name, email, password, type })
-      .then((response) => {
-        if (response.status != 200) throw new Error("Signup failed");
-
-        // store login data in store
-        dispatch({
-          type: SIGNUP,
-          payload: response.data,
-        });
-      })
-      .catch((err) => {
-        throw err;
+  return async (dispatch) => {
+    try {
+      const response = await axios.post(urls.server + "/auth/signup", {
+        name,
+        email,
+        password,
+        type,
       });
+
+      if (response.status != 201) throw new Error("Signup failed");
+
+      // store user data in async storage
+      await AsyncStorage.setItem(
+        "@user",
+        JSON.stringify({
+          token: response.data.token,
+          userId: response.data.userId,
+        })
+      );
+
+      // dispatch login to store
+      dispatch({
+        type: SIGNUP,
+        payload: response.data,
+      });
+    } catch (error) {
+      throw error;
+    }
   };
 };
 
 export const login = (email, password) => {
   return (dispatch) => {
-    axios
-      .post(urls.server + "/auth/login", { email, password })
-      .then((response) => {
-        if (response.status != 200) throw new Error("Signup failed");
+    try {
+      const response = await axios
+      .post(urls.server + "/auth/login", { email, password });
+
+      if (response.status != 200) throw new Error("Login failed");
+
+      // store user data in async storage
+      await AsyncStorage.setItem(
+        "@user",
+        JSON.stringify({
+          token: response.data.token,
+          userId: response.data.userId,
+        })
+      );
 
         // store login data in store
         dispatch({
-          type: SIGNUP,
+          type: LOGIN,
           payload: response.data,
         });
-      })
-      .catch((err) => {
-        throw err;
-      });
+    } catch (error) {
+      throw error;
+    }
+
+    
+      
+  };
+};
+
+export const logout = () => {
+  return (dispatch) => {
+    AsyncStorage.removeItem("@user")
+    dispatch({ type: LOGOUT });
   };
 };
