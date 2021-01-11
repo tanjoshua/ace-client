@@ -65,6 +65,15 @@ export const login = (email, password) => {
   };
 };
 
+export const autoLogin = (token, userId) => {
+  return (dispatch) => {
+    dispatch({
+      type: LOGIN,
+      payload: { token, userId },
+    });
+  };
+};
+
 export const logout = () => {
   return async (dispatch) => {
     await AsyncStorage.removeItem("@user");
