@@ -1,4 +1,4 @@
-import { LOGIN, SIGNUP } from "../actions/types";
+import { LOGIN, SIGNUP, LOGOUT } from "../actions/types";
 
 const initialState = {
   token: null,
