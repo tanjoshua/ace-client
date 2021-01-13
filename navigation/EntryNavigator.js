@@ -31,7 +31,7 @@ const EntryNavigator = () => {
     };
 
     tryLogin();
-  });
+  }, []);
 
   // show loading screen if loading
   if (isLoading) {
@@ -43,7 +43,7 @@ const EntryNavigator = () => {
   }
 
   // return screens
-  return <>{sAuthenticated ? <MainNavigator /> : <AuthNavigator />}</>;
+  return <>{isAuthenticated ? <MainNavigator /> : <AuthNavigator />}</>;
 };
 
 export default EntryNavigator;
