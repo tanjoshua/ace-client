@@ -3,30 +3,27 @@ import { StyleSheet, Text, View } from "react-native";
 import { Button, Headline, TextInput, Title } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const login = (props) => {
+const signup = () => {
   return (
     <SafeAreaView style={styles.screen}>
-      <Headline>Welcome to Ace</Headline>
-      <View style={styles.login}>
+      <Headline>Create your account</Headline>
+      <View style={styles.signup}>
         <TextInput label="Email" mode="outlined" />
         <TextInput label="Password" mode="outlined" secureTextEntry={true} />
-        <Button style={styles.forgotPassword}>Forgot Password?</Button>
+        <TextInput
+          label="Confirm Password"
+          mode="outlined"
+          secureTextEntry={true}
+        />
       </View>
       <View style={styles.buttons}>
-        <Button mode="contained">Login</Button>
-        <Button
-          onPress={() => {
-            props.navigation.navigate("Signup");
-          }}
-        >
-          Create Account
-        </Button>
+        <Button mode="contained">Signup</Button>
       </View>
     </SafeAreaView>
   );
 };
 
-export default login;
+export default signup;
 
 const styles = StyleSheet.create({
   screen: {
@@ -34,10 +31,7 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: "space-between",
   },
-  login: {
+  signup: {
     paddingVertical: 10,
-  },
-  forgotPassword: {
-    alignSelf: "flex-end",
   },
 });
