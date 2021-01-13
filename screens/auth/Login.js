@@ -40,12 +40,14 @@ const login = (props) => {
           id="email"
           label="Email"
           mode="outlined"
+          autoCapitalize="none"
           onInputChange={inputChangeHandler}
         />
         <TextInputWrapper
           id="password"
           label="Password"
           mode="outlined"
+          autoCapitalize="none"
           secureTextEntry={true}
           value={loginState.inputValues.password}
           onInputChange={inputChangeHandler}
