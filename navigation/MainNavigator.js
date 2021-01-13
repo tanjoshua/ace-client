@@ -1,13 +1,15 @@
 import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import Browse from "../navigation/BrowseNavigator";
+import User from "../navigation/UserNavigator";
 
-const MainTab = createBottomTabNavigator();
+const MainTab = createMaterialBottomTabNavigator();
 
 const MainNavigator = () => {
   return (
     <MainTab.Navigator>
       <MainTab.Screen name="Browse" component={Browse} />
+      <MainTab.Screen name="User" component={User} />
     </MainTab.Navigator>
   );
 };

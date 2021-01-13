@@ -6,7 +6,7 @@ import axios from "axios";
 export const signup = (name, email, password, type) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post(urls.server + "/auth/signup", {
+      const response = await axios.post(urls.server + "auth/signup", {
         name,
         email,
         password,
@@ -38,7 +38,7 @@ export const signup = (name, email, password, type) => {
 export const login = (email, password) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post(urls.server + "/auth/login", {
+      const response = await axios.post(urls.server + "auth/login", {
         email,
         password,
       });

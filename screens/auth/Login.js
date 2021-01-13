@@ -2,7 +2,9 @@ import React, { useReducer } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button, Headline, TextInput, Title } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useDispatch } from "react-redux";
 import TextInputWrapper from "../../components/shared/TextInputWrapper";
+import { login as loginAction } from "../../redux/actions/authActions";
 
 // initial state reducer for login form
 const loginInitialState = { inputValues: { email: "", password: "" } };
@@ -21,6 +23,8 @@ const loginReducer = (state, action) => {
 };
 
 const login = (props) => {
+  const dispatch = useDispatch();
+
   // set up reducer
   const [loginState, dispatchLoginForm] = useReducer(
     loginReducer,
@@ -30,6 +34,22 @@ const login = (props) => {
   // handler for any change in form inputs
   const inputChangeHandler = (input, value) => {
     dispatchLoginForm({ type: "UPDATE", input, value });
+  };
+
+  const loginHandler = async () => {
+    try {
+      await dispatch(
+        loginAction(
+          loginState.inputValues.email,
+          loginState.inputValues.password
+        )
+      );
+
+      console.log("logged in");
+    } catch (error) {
+      //TODO: handle errors
+      console.log(error);
+    }
   };
 
   return (
@@ -55,7 +75,9 @@ const login = (props) => {
         <Button style={styles.forgotPassword}>Forgot Password?</Button>
       </View>
       <View style={styles.buttons}>
-        <Button mode="contained">Login</Button>
+        <Button mode="contained" onPress={loginHandler}>
+          Login
+        </Button>
         <Button
           onPress={() => {
             props.navigation.navigate("Signup");

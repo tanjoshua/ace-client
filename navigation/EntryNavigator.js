@@ -21,8 +21,8 @@ const EntryNavigator = () => {
       const userData = await AsyncStorage.getItem("@user");
 
       if (userData) {
-        userData = JSON.parse(userData);
-        dispatch(autoLogin(userData));
+        const userDataJSON = JSON.parse(userData);
+        dispatch(autoLogin(userDataJSON));
         setIsAuthenticated(true);
       } else {
         setIsAuthenticated(false);
