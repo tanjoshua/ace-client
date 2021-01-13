@@ -6,7 +6,7 @@ const ListingStack = createStackNavigator();
 
 const ListingNavigator = () => {
   return (
-    <ListingStack.Navigator>
+    <ListingStack.Navigator screenOptions={{ headerShown: false }}>
       <ListingStack.Screen name="Profile" component={Profile} />
     </ListingStack.Navigator>
   );
