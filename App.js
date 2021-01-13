@@ -12,9 +12,11 @@ export default function App() {
   return (
     <Provider store={store}>
       <PaperProvider>
-        <NavigationContainer>
-          <EntryNavigator />
-        </NavigationContainer>
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <EntryNavigator />
+          </NavigationContainer>
+        </SafeAreaProvider>
       </PaperProvider>
     </Provider>
   );

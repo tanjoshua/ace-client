@@ -5,6 +5,7 @@ import AuthNavigator from "./AuthNavigator";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { autoLogin } from "../redux/actions/authActions";
+import Loading from "../screens/shared/Loading";
 
 const EntryNavigator = () => {
   const dispatch = useDispatch();
@@ -35,11 +36,7 @@ const EntryNavigator = () => {
 
   // show loading screen if loading
   if (isLoading) {
-    return (
-      <View>
-        <Text>Loading</Text>
-      </View>
-    );
+    return <Loading />;
   }
 
   // return screens
