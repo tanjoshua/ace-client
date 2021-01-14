@@ -10,7 +10,8 @@ import Loading from "../screens/shared/Loading";
 const EntryNavigator = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const userId = useSelector((state) => state.auth.userId);
+  console.log(userId);
 
   // check for stored user
   useEffect(() => {
@@ -22,17 +23,14 @@ const EntryNavigator = () => {
 
       if (userData) {
         const userDataJSON = JSON.parse(userData);
-        dispatch(autoLogin(userDataJSON));
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
+        dispatch(autoLogin(userDataJSON.token, userDataJSON.userId));
       }
 
       setIsLoading(false);
     };
 
     tryLogin();
-  }, []);
+  }, [userId]);
 
   // show loading screen if loading
   if (isLoading) {
@@ -40,7 +38,7 @@ const EntryNavigator = () => {
   }
 
   // return screens
-  return <>{isAuthenticated ? <MainNavigator /> : <AuthNavigator />}</>;
+  return <>{userId ? <MainNavigator /> : <AuthNavigator />}</>;
 };
 
 export default EntryNavigator;
