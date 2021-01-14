@@ -1,19 +1,82 @@
-import React from "react";
+import axios from "axios";
+import React, { useReducer } from "react";
+import { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Avatar, Button } from "react-native-paper";
+import { Avatar, Button, Divider, IconButton } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/actions/authActions";
 
+import urls from "../../constants/urls";
+import Loading from "../../screens/shared/Loading";
+
+// initial state reducer for user details
+const profileInitialState = {
+  isLoaded: false,
+  values: { name: "", email: "", profilePicUrl: "" },
+};
+const profileReducer = (state, action) => {
+  return { ...state, values: action.values, isLoaded: true };
+};
+
 const Profile = () => {
+  // set up reducer
+  const [profileState, dispatchProfile] = useReducer(
+    profileReducer,
+    profileInitialState
+  );
+
+  // get userId
+  const token = useSelector((state) => state.auth.token);
+
+  // load details TODO: error catching
+  useEffect(() => {
+    const loadDetails = async () => {
+      const response = await axios.get(urls.server + "user", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      dispatchProfile({
+        values: {
+          name: response.data.name,
+          email: response.data.email,
+          profilePicUrl: response.data.profilePic
+            ? response.data.profilePic.url
+            : "", //TODO: implement default profile pic
+        },
+      });
+    };
+    loadDetails();
+  }, []);
+
   const dispatch = useDispatch();
+
+  // check if loading
+  if (!profileState.isLoaded) {
+    return <Loading />;
+  }
 
   return (
     <SafeAreaView style={styles.screen}>
-      <Avatar.Image size={125} />
+      <Avatar.Image
+        size={125}
+        source={{ uri: profileState.values.profilePicUrl }}
+      />
       <View style={styles.info}>
-        <Text>Name</Text>
+        <View style={styles.infoSection}>
+          <IconButton icon="account-circle" />
+          <Text>{profileState.values.name}</Text>
+        </View>
+        <Divider />
+        <View style={styles.infoSection}>
+          <IconButton icon="email" />
+          <Text>{profileState.values.email}</Text>
+        </View>
+        <Divider />
+        <View style={styles.infoSection}></View>
+        <Divider />
       </View>
+
       <View style={styles.actions}>
         <Button icon="account-edit">Edit details</Button>
         <Button
@@ -33,6 +96,11 @@ export default Profile;
 
 const styles = StyleSheet.create({
   screen: { flex: 1, alignItems: "center", padding: 20 },
-  info: { paddingVertical: 20 },
-  actions: { paddingVertical: 20 },
+  info: { paddingVertical: 20, width: "100%" },
+  infoSection: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  actions: {},
 });

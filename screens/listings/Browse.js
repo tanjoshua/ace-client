@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Searchbar } from "react-native-paper";
+import { Divider, Searchbar } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const browse = () => {
@@ -12,6 +12,7 @@ const browse = () => {
       <View style={styles.categories}>
         <Text>browse</Text>
       </View>
+      <Divider />
       <View style={styles.latest}>
         <Text>latest</Text>
       </View>
@@ -24,5 +25,5 @@ export default browse;
 const styles = StyleSheet.create({
   screen: { flex: 1, alignItems: "center", padding: 20 },
   categories: { paddingVertical: 10 },
-  latest: { paddingVertical: 10 },
+  latest: {},
 });
