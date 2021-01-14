@@ -1,12 +1,21 @@
 import React, { useReducer } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Button, Headline, TextInput, Title } from "react-native-paper";
+import { Button, Headline, ToggleButton } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useDispatch } from "react-redux";
 import TextInputWrapper from "../../components/shared/TextInputWrapper";
+import { signup as signupAction } from "../../redux/actions/authActions";
 
+// TODO: ERROR CATCHING + check password match
 // initial state reducer for login form
 const signupInitialState = {
-  inputValues: { email: "", password: "", confirmPassword: "" },
+  inputValues: {
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    type: "student",
+  },
 };
 const signupReducer = (state, action) => {
   switch (action.type) {
@@ -29,21 +38,29 @@ const signup = () => {
     signupInitialState
   );
 
+  const dispatch = useDispatch();
+
   // handler for any change in form inputs
   const inputChangeHandler = (input, value) => {
     dispatchSignupForm({ type: "UPDATE", input, value });
   };
-
-  console.log(signupState);
   return (
     <SafeAreaView style={styles.screen}>
       <Headline>Create your account</Headline>
       <View style={styles.signup}>
         <TextInputWrapper
+          id="name"
+          label="Name"
+          mode="outlined"
+          value={signupState.inputValues.name}
+          onInputChange={inputChangeHandler}
+        />
+        <TextInputWrapper
           id="email"
           label="Email"
           mode="outlined"
           autoCapitalize="none"
+          value={signupState.inputValues.email}
           onInputChange={inputChangeHandler}
         />
         <TextInputWrapper
@@ -52,6 +69,7 @@ const signup = () => {
           mode="outlined"
           autoCapitalize="none"
           secureTextEntry={true}
+          value={signupState.inputValues.password}
           onInputChange={inputChangeHandler}
         />
         <TextInputWrapper
@@ -60,11 +78,38 @@ const signup = () => {
           mode="outlined"
           autoCapitalize="none"
           secureTextEntry={true}
+          value={signupState.inputValues.confirmPassword}
           onInputChange={inputChangeHandler}
         />
       </View>
+      <View>
+        <ToggleButton.Row
+          onValueChange={(value) => {
+            inputChangeHandler("type", value);
+          }}
+          value={signupState.inputValues.type}
+          style={styles.typeSelection}
+        >
+          <ToggleButton icon="school" value="student" />
+          <ToggleButton icon="account-child" value="parent" />
+          <ToggleButton icon="teach" value="tutor" />
+        </ToggleButton.Row>
+      </View>
       <View style={styles.buttons}>
-        <Button mode="contained">Signup</Button>
+        <Button
+          mode="contained"
+          onPress={() => {
+            dispatch(
+              signupAction(
+                signupState.inputValues.name,
+                signupState.inputValues.email,
+                signupState.inputValues.password
+              )
+            );
+          }}
+        >
+          Signup
+        </Button>
       </View>
     </SafeAreaView>
   );
@@ -80,5 +125,9 @@ const styles = StyleSheet.create({
   },
   signup: {
     paddingVertical: 10,
+  },
+  typeSelection: {
+    width: "100%",
+    justifyContent: "space-evenly",
   },
 });

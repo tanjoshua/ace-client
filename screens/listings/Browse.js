@@ -8,7 +8,13 @@ const browse = () => {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <Searchbar placeholder="Search" value={searchQuery} />
+      <Searchbar
+        placeholder="Search"
+        value={searchQuery}
+        onChangeText={(query) => {
+          setSearchQuery(query);
+        }}
+      />
       <View style={styles.categories}>
         <Text>browse</Text>
       </View>

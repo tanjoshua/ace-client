@@ -61,6 +61,7 @@ const login = (props) => {
           label="Email"
           mode="outlined"
           autoCapitalize="none"
+          value={loginState.inputValues.email}
           onInputChange={inputChangeHandler}
         />
         <TextInputWrapper
