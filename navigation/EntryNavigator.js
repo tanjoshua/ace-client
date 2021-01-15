@@ -11,7 +11,6 @@ const EntryNavigator = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const userId = useSelector((state) => state.auth.userId);
-  console.log(userId);
 
   // check for stored user
   useEffect(() => {
