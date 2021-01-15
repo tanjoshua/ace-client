@@ -90,9 +90,18 @@ const signup = () => {
           value={signupState.inputValues.type}
           style={styles.typeSelection}
         >
-          <ToggleButton icon="school" value="student" />
-          <ToggleButton icon="account-child" value="parent" />
-          <ToggleButton icon="teach" value="tutor" />
+          <View style={styles.type}>
+            <Text>Student</Text>
+            <ToggleButton icon="school" value="student" />
+          </View>
+          <View style={styles.type}>
+            <Text>Parent</Text>
+            <ToggleButton icon="account-child" value="parent" />
+          </View>
+          <View style={styles.type}>
+            <Text>Tutor</Text>
+            <ToggleButton icon="teach" value="tutor" />
+          </View>
         </ToggleButton.Row>
       </View>
       <View style={styles.buttons}>
@@ -103,7 +112,8 @@ const signup = () => {
               signupAction(
                 signupState.inputValues.name,
                 signupState.inputValues.email,
-                signupState.inputValues.password
+                signupState.inputValues.password,
+                signupState.inputValues.type
               )
             );
           }}
@@ -129,5 +139,8 @@ const styles = StyleSheet.create({
   typeSelection: {
     width: "100%",
     justifyContent: "space-evenly",
+  },
+  type: {
+    alignItems: "center",
   },
 });
