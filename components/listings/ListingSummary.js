@@ -1,41 +1,36 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import {
-  ActivityIndicator,
-  Avatar,
-  Caption,
-  Card,
-  Divider,
-  Title,
-} from "react-native-paper";
+import { ActivityIndicator, Avatar, Caption, Card } from "react-native-paper";
 import { AirbnbRating } from "react-native-ratings";
 
 const ListingSummary = (props) => {
   return (
     <View>
-      <Card elevation={10}>
-        {false ? (
-          <View style={styles.loading}>
-            <ActivityIndicator />
+      <Card elevation={1}>
+        <Card.Title title={props.title} />
+        <Card.Content>
+          <Text>{props.description}</Text>
+        </Card.Content>
+        <Card.Actions style={styles.footer}>
+          <View style={styles.owner}>
+            <Avatar.Image
+              size={20}
+              source={{ uri: props.tutor.profilePic.url }}
+            />
+            <Caption style={styles.ownerLabel}>{props.tutor.name}</Caption>
           </View>
-        ) : (
-          <>
-            <Card.Title title="Title" />
-            <Card.Content>
-              <Text>Description</Text>
-            </Card.Content>
-            <Card.Actions style={styles.footer}>
-              <View style={styles.owner}>
-                <Avatar.Image size={20} />
-                <Caption style={styles.ownerLabel}>Tutor</Caption>
-              </View>
-              <View style={styles.ratings}>
-                <AirbnbRating isDisabled showRating={false} size={10} />
-                <Caption style={{ marginLeft: 2 }}>(5)</Caption>
-              </View>
-            </Card.Actions>
-          </>
-        )}
+          <View style={styles.ratings}>
+            <AirbnbRating
+              isDisabled
+              showRating={false}
+              size={10}
+              defaultRating={props.tutor.totalRating / props.tutor.ratingCount}
+            />
+            <Caption style={{ marginLeft: 2 }}>
+              ({props.tutor.ratingCount})
+            </Caption>
+          </View>
+        </Card.Actions>
       </Card>
     </View>
   );

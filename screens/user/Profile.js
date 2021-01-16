@@ -26,7 +26,7 @@ const Profile = () => {
     profileInitialState
   );
 
-  // get userId
+  // get token
   const token = useSelector((state) => state.auth.token);
 
   // load details TODO: error catching
