@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
-import { Divider, Searchbar, Surface, Title } from "react-native-paper";
+import {
+  ActivityIndicator,
+  Caption,
+  Divider,
+  Searchbar,
+  Surface,
+  Title,
+} from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -13,7 +20,7 @@ const browse = () => {
   [listings, setListings] = useState([]);
   [currentPage, setCurrentPage] = useState(1);
   [totalPages, setTotalPages] = useState(1);
-  [isLoading, setIsLoading] = useState(true);
+  [isLoading, setIsLoading] = useState(false);
 
   // get user token
   const token = useSelector((state) => state.auth.token);
@@ -24,7 +31,10 @@ const browse = () => {
       return;
     }
 
-    setIsLoading(true);
+    if (page === 1) {
+      setIsLoading(true); // only show loading indicator if at start
+    }
+
     const response = await axios.get(urls.server + "listings", {
       headers: { Authorization: `Bearer ${token}` },
       params: { page: page },
@@ -33,6 +43,7 @@ const browse = () => {
     if (response.status == 200) {
       if (page === 1) {
         setListings(response.data.listings);
+        setIsLoading(false);
       } else {
         setListings(listings.concat(response.data.listings));
       }
@@ -41,7 +52,6 @@ const browse = () => {
     } else {
       // TODO: error catching
     }
-    setIsLoading(false);
   };
 
   // load latest listings when screen mounts
@@ -96,6 +106,15 @@ const browse = () => {
         data={listings}
         ListHeaderComponent={BrowseHeader}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+        ListFooterComponent={() =>
+          currentPage > totalPages ? (
+            <View style={{ alignItems: "center" }}>
+              <Caption>No more listings</Caption>
+            </View>
+          ) : (
+            <ActivityIndicator style={{ paddingVertical: 5 }} />
+          )
+        }
         keyExtractor={(item, index) => item._id.toString()}
         renderItem={({ item, index }) => {
           return (
