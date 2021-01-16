@@ -19,7 +19,7 @@ const browse = () => {
   const token = useSelector((state) => state.auth.token);
 
   // load listings function
-  const loadListings = async (page = currentPage) => {
+  const loadListings = async (page) => {
     if (page > totalPages) {
       return;
     }
@@ -27,11 +27,11 @@ const browse = () => {
     setIsLoading(true);
     const response = await axios.get(urls.server + "listings", {
       headers: { Authorization: `Bearer ${token}` },
-      params: { page },
+      params: { page: page },
     });
 
     if (response.status == 200) {
-      if (page == 1) {
+      if (page === 1) {
         setListings(response.data.listings);
       } else {
         setListings(listings.concat(response.data.listings));
@@ -46,20 +46,13 @@ const browse = () => {
 
   // load latest listings when screen mounts
   useEffect(() => {
-    loadListings();
+    loadListings(1);
   }, []);
 
   // Header component for flatlist
   const BrowseHeader = () => {
     return (
       <View>
-        <Searchbar
-          placeholder="Search"
-          value={searchQuery}
-          onChangeText={(query) => {
-            setSearchQuery(query);
-          }}
-        />
         <View style={styles.categories}>
           <Surface style={styles.surface}>
             <Text>Primary</Text>
@@ -90,14 +83,24 @@ const browse = () => {
 
   return (
     <SafeAreaView style={styles.screen}>
+      <View style={styles.search}>
+        <Searchbar
+          placeholder="Search"
+          value={searchQuery}
+          onChangeText={(query) => {
+            setSearchQuery(query);
+          }}
+        />
+      </View>
       <FlatList
         data={listings}
         ListHeaderComponent={BrowseHeader}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+        keyExtractor={(item, index) => item._id.toString()}
         renderItem={({ item, index }) => {
           return (
             <ListingSummary
-              id={item._id.toString()}
+              id={item._id}
               title={item.title}
               description={item.description}
               hourlyRate={item.hourlyRate}
@@ -107,6 +110,8 @@ const browse = () => {
         }}
         refreshing={isLoading}
         onRefresh={loadListings.bind(this, 1)}
+        onEndReachedThreshold={0.5}
+        onEndReached={loadListings.bind(this, currentPage)}
       />
     </SafeAreaView>
   );
@@ -116,9 +121,13 @@ export default browse;
 
 const styles = StyleSheet.create({
   screen: { flex: 1, alignItems: "center", padding: 20 },
+  search: {
+    marginBottom: 5,
+    width: "100%",
+  },
   categories: {
     flexDirection: "row",
-    paddingVertical: 10,
+    paddingVertical: 5,
     width: "100%",
     flexWrap: "wrap",
     justifyContent: "space-between",
