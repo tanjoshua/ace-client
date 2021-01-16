@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Divider, Searchbar, Surface, Title } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import ListingSummary from "../../components/listings/ListingSummary";
 
 const browse = () => {
   [searchQuery, setSearchQuery] = useState("");
@@ -39,6 +40,7 @@ const browse = () => {
       <View style={styles.latest}>
         <Title>Latest Listings</Title>
         <Divider />
+        <ListingSummary />
       </View>
     </SafeAreaView>
   );
