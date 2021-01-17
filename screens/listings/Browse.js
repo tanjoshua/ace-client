@@ -20,7 +20,7 @@ const browse = () => {
   [listings, setListings] = useState([]);
   [currentPage, setCurrentPage] = useState(1);
   [totalPages, setTotalPages] = useState(1);
-  [isLoading, setIsLoading] = useState(false);
+  [isRefreshing, setIsRefreshing] = useState(false);
 
   // get user token
   const token = useSelector((state) => state.auth.token);
@@ -31,19 +31,14 @@ const browse = () => {
       return;
     }
 
-    if (page === 1) {
-      setIsLoading(true); // only show loading indicator if at start
-    }
-
     const response = await axios.get(urls.server + "listings", {
       headers: { Authorization: `Bearer ${token}` },
       params: { page: page },
     });
 
     if (response.status == 200) {
-      if (page === 1) {
+      if (page == 1) {
         setListings(response.data.listings);
-        setIsLoading(false);
       } else {
         setListings(listings.concat(response.data.listings));
       }
@@ -52,6 +47,12 @@ const browse = () => {
     } else {
       // TODO: error catching
     }
+  };
+
+  const refresh = () => {
+    setIsRefreshing(true);
+    loadListings(1);
+    setIsRefreshing(false);
   };
 
   // load latest listings when screen mounts
@@ -127,8 +128,8 @@ const browse = () => {
             />
           );
         }}
-        refreshing={isLoading}
-        onRefresh={loadListings.bind(this, 1)}
+        refreshing={isRefreshing}
+        onRefresh={refresh}
         onEndReachedThreshold={0.5}
         onEndReached={loadListings.bind(this, currentPage)}
       />

@@ -1,6 +1,15 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { ActivityIndicator, Avatar, Caption, Card } from "react-native-paper";
+import {
+  ActivityIndicator,
+  Avatar,
+  Badge,
+  Caption,
+  Card,
+  Chip,
+  Divider,
+  Subheading,
+} from "react-native-paper";
 import { AirbnbRating } from "react-native-ratings";
 
 const ListingSummary = (props) => {
@@ -9,15 +18,19 @@ const ListingSummary = (props) => {
       <Card elevation={1}>
         <Card.Title title={props.title} />
         <Card.Content>
-          <Text>{props.description}</Text>
+          <Subheading>{props.hourlyRate}/hr</Subheading>
+          <Divider />
+          <Text style={styles.description} numberOfLines={3}>
+            {props.description}
+          </Text>
         </Card.Content>
         <Card.Actions style={styles.footer}>
-          <View style={styles.owner}>
+          <View style={styles.tutorDetails}>
             <Avatar.Image
               size={20}
               source={{ uri: props.tutor.profilePic.url }}
             />
-            <Caption style={styles.ownerLabel}>{props.tutor.name}</Caption>
+            <Caption style={styles.tutorLabel}>{props.tutor.name}</Caption>
           </View>
           <View style={styles.ratings}>
             <AirbnbRating
@@ -42,11 +55,11 @@ const styles = StyleSheet.create({
   footer: {
     justifyContent: "space-between",
   },
-  owner: {
+  tutorDetails: {
     flexDirection: "row",
     alignItems: "center",
   },
-  ownerLabel: {
+  tutorLabel: {
     marginLeft: 5,
   },
   ratings: {
