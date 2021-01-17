@@ -15,7 +15,7 @@ import axios from "axios";
 import urls from "../../constants/urls";
 import ListingSummary from "../../components/listings/ListingSummary";
 
-const browse = () => {
+const browse = (props) => {
   [searchQuery, setSearchQuery] = useState("");
   [listings, setListings] = useState([]);
   [currentPage, setCurrentPage] = useState(1);
@@ -125,6 +125,11 @@ const browse = () => {
               description={item.description}
               hourlyRate={item.hourlyRate}
               tutor={item.tutor}
+              onPress={() => {
+                props.navigation.navigate("ListingDetails", {
+                  listingId: item._id,
+                });
+              }}
             />
           );
         }}
