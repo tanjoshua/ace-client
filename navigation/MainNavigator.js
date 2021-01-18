@@ -20,15 +20,6 @@ const MainNavigator = () => {
         }}
       />
       <MainTab.Screen
-        name="Search"
-        component={Search}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="magnify" color={color} size={26} />
-          ),
-        }}
-      />
-      <MainTab.Screen
         name="User"
         component={User}
         options={{

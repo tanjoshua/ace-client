@@ -9,25 +9,25 @@ import urls from "../../constants/urls";
 
 import ListingSummary from "../../components/listings/ListingSummary";
 
-const SearchResults = () => {
-  [searchQuery, setSearchQuery] = useState("");
-  [listings, setListings] = useState([]);
-  [currentPage, setCurrentPage] = useState(1);
-  [totalPages, setTotalPages] = useState(1);
-  [isRefreshing, setIsRefreshing] = useState(false);
+const SearchResults = (props) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [listings, setListings] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // get user token
   const token = useSelector((state) => state.auth.token);
 
   // load listings function
-  const loadListings = async (page) => {
+  const loadListings = async (page, query) => {
     if (page > totalPages) {
       return;
     }
 
     const response = await axios.get(urls.server + "listings", {
       headers: { Authorization: `Bearer ${token}` },
-      params: { page: page },
+      params: { page, searchQuery: query },
     });
 
     if (response.status == 200) {
@@ -51,19 +51,15 @@ const SearchResults = () => {
 
   // load latest listings when screen mounts
   useEffect(() => {
-    loadListings(1);
+    loadListings(1, props.route.params.searchQuery);
   }, []);
+
+  // reload listings when search query changes
 
   return (
     <SafeAreaView style={styles.screen}>
       <View style={styles.search}>
-        <Searchbar
-          placeholder="Search"
-          value={searchQuery}
-          onChangeText={(query) => {
-            setSearchQuery(query);
-          }}
-        />
+        <Searchbar placeholder="Search" />
       </View>
       <FlatList
         data={listings}

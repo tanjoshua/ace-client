@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import {
   ActivityIndicator,
   Caption,
@@ -16,11 +16,11 @@ import urls from "../../constants/urls";
 import ListingSummary from "../../components/listings/ListingSummary";
 
 const browse = (props) => {
-  [searchQuery, setSearchQuery] = useState("");
-  [listings, setListings] = useState([]);
-  [currentPage, setCurrentPage] = useState(1);
-  [totalPages, setTotalPages] = useState(1);
-  [isRefreshing, setIsRefreshing] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [listings, setListings] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // get user token
   const token = useSelector((state) => state.auth.token);
@@ -100,6 +100,9 @@ const browse = (props) => {
           value={searchQuery}
           onChangeText={(query) => {
             setSearchQuery(query);
+          }}
+          onSubmitEditing={() => {
+            props.navigation.navigate("SearchResults", { searchQuery });
           }}
         />
       </View>
