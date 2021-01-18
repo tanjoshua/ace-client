@@ -17,6 +17,7 @@ const SearchResults = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // get user token
   const token = useSelector((state) => state.auth.token);
@@ -45,15 +46,24 @@ const SearchResults = (props) => {
     }
   };
 
-  const refresh = () => {
+  // create refresh animations
+  const refresh = async () => {
     setIsRefreshing(true);
-    loadListings(1);
+    await loadListings(1);
     setIsRefreshing(false);
   };
 
-  // reload listings on mount
+  // create loading animations
+  const loadNew = async () => {
+    setListings([]);
+    setIsLoading(true);
+    await loadListings(1);
+    setIsLoading(false);
+  };
+
+  // load listings on mount
   useEffect(() => {
-    loadListings(1);
+    loadNew();
   }, []);
 
   return (
@@ -65,23 +75,28 @@ const SearchResults = (props) => {
           onChangeText={(query) => {
             setSearchQuery(query);
           }}
-          onSubmitEditing={(query) => {
-            loadListings(1);
+          onSubmitEditing={() => {
+            loadNew();
           }}
         />
       </View>
+      {isLoading && <ActivityIndicator />}
       <FlatList
         data={listings}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-        ListFooterComponent={() =>
-          currentPage > totalPages ? (
+        ListFooterComponent={() => {
+          if (isLoading) {
+            return <View></View>;
+          }
+
+          return currentPage > totalPages ? (
             <View style={{ alignItems: "center" }}>
               <Caption>No more listings</Caption>
             </View>
           ) : (
             <ActivityIndicator style={{ paddingVertical: 5 }} />
-          )
-        }
+          );
+        }}
         keyExtractor={(item, index) => item._id.toString()}
         renderItem={({ item, index }) => {
           return (

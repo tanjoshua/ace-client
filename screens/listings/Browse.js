@@ -21,6 +21,7 @@ const browse = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // get user token
   const token = useSelector((state) => state.auth.token);
@@ -49,15 +50,21 @@ const browse = (props) => {
     }
   };
 
-  const refresh = () => {
+  const refresh = async () => {
     setIsRefreshing(true);
-    loadListings(1);
+    await loadListings(1);
     setIsRefreshing(false);
   };
 
   // load latest listings when screen mounts
   useEffect(() => {
-    loadListings(1);
+    const load = async () => {
+      setIsLoading(true);
+      await loadListings(1);
+      setIsLoading(false);
+    };
+
+    load();
   }, []);
 
   // Header component for flatlist
@@ -88,6 +95,7 @@ const browse = (props) => {
           <Title>Latest Listings</Title>
           <Divider />
         </View>
+        {isLoading && <ActivityIndicator />}
       </View>
     );
   };
@@ -110,15 +118,19 @@ const browse = (props) => {
         data={listings}
         ListHeaderComponent={BrowseHeader}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-        ListFooterComponent={() =>
-          currentPage > totalPages ? (
+        ListFooterComponent={() => {
+          if (isLoading) {
+            return <View></View>;
+          }
+
+          return currentPage > totalPages ? (
             <View style={{ alignItems: "center" }}>
               <Caption>No more listings</Caption>
             </View>
           ) : (
             <ActivityIndicator style={{ paddingVertical: 5 }} />
-          )
-        }
+          );
+        }}
         keyExtractor={(item, index) => item._id.toString()}
         renderItem={({ item, index }) => {
           return (
