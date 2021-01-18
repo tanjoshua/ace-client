@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { View, Text } from "react-native";
-import MainNavigator from "./MainNavigator";
+import MainNavigator from "../MainNavigator";
 import AuthNavigator from "./AuthNavigator";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { autoLogin } from "../redux/actions/authActions";
-import Loading from "../screens/shared/Loading";
+import { autoLogin } from "../../redux/actions/authActions";
+import Loading from "../../screens/shared/Loading";
 
 const EntryNavigator = () => {
   const dispatch = useDispatch();

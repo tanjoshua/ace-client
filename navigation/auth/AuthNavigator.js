@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import Login from "../screens/auth/Login";
-import Signup from "../screens/auth/Signup";
+import Login from "../../screens/auth/Login";
+import Signup from "../../screens/auth/Signup";
 
 const AuthStack = createStackNavigator();
 

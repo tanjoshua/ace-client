@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Provider as PaperProvider, DefaultTheme } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
-import EntryNavigator from "./navigation/EntryNavigator";
+import EntryNavigator from "./navigation/auth/EntryNavigator";
 import store from "./redux/store";
 
 export default function App() {
