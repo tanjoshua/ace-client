@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 
 import urls from "../../constants/urls";
 import Loading from "../../screens/shared/Loading";
-import { Rating, AirbnbRating } from "react-native-ratings";
+import { Rating } from "react-native-ratings";
 
 const ListingDetails = (props) => {
   const { listingId } = props.route.params;
