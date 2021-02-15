@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { View, Text } from "react-native";
 import MainNavigator from "../MainNavigator";
 import AuthNavigator from "./AuthNavigator";
 import { useDispatch, useSelector } from "react-redux";
